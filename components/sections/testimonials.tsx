@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Carousel } from "@/components/carousel";
 import { getTestimonials } from "@/lib/testimonials";
 
 export async function Testimonials() {
@@ -7,29 +8,29 @@ export async function Testimonials() {
   if (testimonials.length === 0) return null;
 
   return (
-    <section aria-labelledby="testimonials-heading" className="mx-auto max-w-6xl px-6 py-16">
-      <h2 id="testimonials-heading" className="text-2xl font-semibold">
+    <section
+      aria-labelledby="testimonials-heading"
+      className="container-page flex flex-col gap-5 py-[70px] lg:gap-[30px] lg:py-[100px]"
+    >
+      <h2 id="testimonials-heading" className="heading-section text-center leading-[35px] tracking-[0.26px] lg:leading-[50px]">
         Testimonials
       </h2>
-      <ul className="mt-8 grid gap-6 md:grid-cols-3">
-        {testimonials.map(({ id, name, role, quote, rating, avatar }) => (
-          <li key={id}>
-            <figure className="flex h-full flex-col border p-6">
-              <p className="text-sm" aria-label={`Rated ${rating} out of 5`}>
-                ★ {rating}
-              </p>
-              <blockquote className="mt-2 flex-1">{quote}</blockquote>
-              <figcaption className="mt-4 flex items-center gap-3">
-                <Image src={avatar} alt="" width={40} height={40} className="rounded-full" />
-                <span className="text-sm">
-                  <span className="block font-medium">{name}</span>
-                  <span className="text-neutral-600">{role}</span>
-                </span>
-              </figcaption>
-            </figure>
-          </li>
+
+      <Carousel label="Testimonials">
+        {testimonials.map(({ id, name, role, quote, avatar }) => (
+          <figure
+            key={id}
+            className="flex h-[326px] w-[300px] flex-col items-center justify-center gap-[16.8px] border border-line px-[15px] py-[21px] text-center"
+          >
+            <Image src={avatar} alt="" width={120} height={120} className="size-[120px] object-cover" />
+            <figcaption className="flex flex-col gap-[5px]">
+              <span className="text-sm leading-[18px] font-semibold">{name}</span>
+              <span className="text-xs leading-4 text-subtle">{role}</span>
+            </figcaption>
+            <blockquote className="line-clamp-4 w-[250px] text-sm leading-5">{quote}</blockquote>
+          </figure>
         ))}
-      </ul>
+      </Carousel>
     </section>
   );
 }

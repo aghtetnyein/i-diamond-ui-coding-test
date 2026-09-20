@@ -7,7 +7,6 @@ export type Testimonial = {
   name: string;
   role: string;
   quote: string;
-  rating: number;
   avatar: string;
 };
 
@@ -16,10 +15,9 @@ type ApiTestimonial = {
   name: string;
   designation: string;
   message: string;
-  rating: number;
 };
 
-export async function getTestimonials(limit = 6): Promise<Testimonial[]> {
+export async function getTestimonials(): Promise<Testimonial[]> {
   "use cache";
   cacheLife("hours");
 
@@ -28,12 +26,11 @@ export async function getTestimonials(limit = 6): Promise<Testimonial[]> {
 
   const data: ApiTestimonial[] = await res.json();
 
-  return data.slice(0, limit).map(({ id, name, designation, message, rating }) => ({
+  return data.map(({ id, name, designation, message }) => ({
     id,
     name,
     role: designation.trim(),
     quote: message,
-    rating,
     // The payload's avatar URLs point at a retired host; the same files are served from the API origin.
     avatar: `${API_ORIGIN}/avatar/${id}.jpg`,
   }));

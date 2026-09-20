@@ -1,5 +1,91 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-dm-sans);
+  --font-serif: var(--font-playfair);
+}
+
+@theme {
+  /* The design only defines 375 and 1440. Its desktop layout needs about 1280px, so it starts there. */
+  --breakpoint-lg: 80rem;
+  --breakpoint-xl: 87.5rem;
+
+  --color-ink: #101010;
+  --color-body: #434343;
+  --color-muted: #7a7a7a;
+  --color-subtle: #505050;
+  --color-navy: #15274b;
+  --color-accent: #0d4269;
+  --color-line: #e4e4e4;
+  --color-line-strong: #c4c4c4;
+  --color-hero: #f0f0f0;
+  --color-tint: #fcfcfc;
+  --color-footer: #f8f8f8;
+
+  --shadow-card: 0 2px 15px 0 rgb(122 122 122 / 0.1);
+}
+
+@layer base {
+  a,
+  button,
+  summary {
+    transition-property: color, background-color, border-color, opacity;
+    transition-duration: 200ms;
+    transition-timing-function: ease-out;
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 15px;
+
+  @variant lg {
+    padding-inline: 80px;
+  }
+}
+
+@utility heading-section {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  color: var(--color-ink);
+
+  @variant lg {
+    font-size: 36px;
+    letter-spacing: 0.36px;
+  }
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+
+/* The panel is the ::details-content box, so it can fade and slide on every open and close without JS. */
+.mobile-menu::details-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  translate: 0 -8px;
+}
+
+.mobile-menu[open]::details-content {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mobile-menu::details-content {
+    transition:
+      opacity 200ms ease-out,
+      translate 200ms ease-out,
+      content-visibility 200ms allow-discrete;
+  }
 }

@@ -1,23 +1,28 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { DM_Sans, Playfair_Display } from "next/font/google";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
+  subsets: ["latin"],
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "iDiamond",
-  description: "iDiamond landing page",
+  title: "Custom Jewelry | MyJewel",
+  description: "Create your masterpiece: bespoke jewelry crafted for you.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col font-sans">
+    <html lang="en" className={`${dmSans.variable} ${playfair.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col bg-white font-sans text-body">
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

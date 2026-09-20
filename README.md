@@ -1,10 +1,12 @@
-# iDiamond — Next.js assessment
+# Diamond Jewelry Dubai
 
-Landing page built with Next.js 16 (App Router, Cache Components), React 19 and Tailwind CSS v4.
+Next.js assessment. One page built from the Figma file, desktop (1440) and mobile (375).
 
-## Getting started
+Stack: Next.js 16 (App Router), React 19, Tailwind CSS v4, TypeScript.
 
-Requires Node 22.18+ (the tests rely on Node running TypeScript files directly) and pnpm.
+## Run it
+
+Needs Node 22.18+ and pnpm.
 
 ```bash
 pnpm install
@@ -12,74 +14,43 @@ cp .env.example .env.local
 pnpm dev
 ```
 
-| Script | Purpose |
-| --- | --- |
-| `pnpm dev` / `pnpm build` / `pnpm start` | Next.js |
-| `pnpm lint` / `pnpm typecheck` | ESLint, `tsc --noEmit` |
-| `pnpm test` | Unit tests (`node --test`, no extra tooling) |
+Other scripts: `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
 
 ## Environment
 
-| Variable | Description |
+| Variable | |
 | --- | --- |
-| `EMAIL_ADDRESS` | Inbox that receives newsletter subscription notifications. Server-only. |
-| `RESEND_API_KEY` | Optional. When set, notifications go out through Resend. Without it they are logged on the server. |
-
-## Structure
-
-```
-app/
-  actions/newsletter.ts     Server Action behind the footer form
-  layout.tsx, page.tsx
-components/
-  layout/                   header, footer
-  sections/                 page sections
-  newsletter-form.tsx       the only client component
-lib/
-  testimonials.ts           cached data access
-  newsletter.ts             zod schema for the form (+ test)
-  mailer.ts                 notification transport
-```
-
-## Rendering strategy
-
-| Piece | Strategy | Why |
-| --- | --- | --- |
-| Layout, header, footer, static sections | Static prerender | No request-time data, served from the CDN |
-| Testimonials | Cached server data, revalidated hourly (ISR) | Third-party content that changes rarely |
-| Newsletter form | Client component + Server Action | The only interactive part; everything else ships zero JS |
-| Notification | Server only | `EMAIL_ADDRESS` never reaches the browser |
-
-`next build` reports `/` as static with `Revalidate 1h / Expire 1d`.
+| `EMAIL_ADDRESS` | Inbox that gets the newsletter notification. Server only. |
+| `RESEND_API_KEY` | Optional. With it the notification is a real email sent through Resend. Without it the message is logged on the server. |
 
 ## Newsletter
 
-`components/newsletter-form.tsx` posts to the `subscribe` Server Action through `useActionState`.
+The footer form posts to a Server Action (`app/actions/newsletter.ts`).
 
-- The browser validates first (`type="email"`, `required`). The action validates again with a zod schema (`lib/newsletter.ts`), because a Server Action is a public endpoint and the browser check accepts addresses like `foo@bar`.
-- On success the action calls `sendNotification` with `process.env.EMAIL_ADDRESS` as the recipient.
-- `lib/mailer.ts` sends through the Resend REST API when `RESEND_API_KEY` is set. Without a key it logs the message on the server, as the brief allows. It uses `fetch`, so there is no mail SDK in the bundle.
-- The form has a honeypot field. A submission that fills it gets a normal success response and no email is sent. Rate limiting would be the next step and needs shared storage (Redis/KV), which is out of scope here.
-- The form submits without JavaScript too, and keeps the typed value when validation fails.
+- The email is checked in the browser (`type="email"`) and again on the server with zod. The server check is the one that counts, since a Server Action can be called directly.
+- A valid submit sends a plain notification to `process.env.EMAIL_ADDRESS` through `lib/mailer.ts`.
+- A hidden honeypot field catches simple bots. They get a normal success response and nothing is sent.
+- The form works without JavaScript and keeps the typed value when validation fails.
 
 ## Testimonials API and caching
 
-Endpoint: `GET https://testimonialapi.vercel.app/api`. Public, no API key, and it returns actual testimonial copy with name, job title, rating and avatar, so the section needs no placeholder text.
+Endpoint: `GET https://testimonialapi.vercel.app/api`. It is public, needs no key, and returns name, job title, photo and a quote for each person.
 
 ```ts
 // lib/testimonials.ts
-export async function getTestimonials(limit = 6): Promise<Testimonial[]> {
+export async function getTestimonials(): Promise<Testimonial[]> {
   "use cache";
   cacheLife("hours");
 
   const res = await fetch(`${API_ORIGIN}/api`);
   if (!res.ok) throw new Error(`Testimonials request failed: ${res.status}`);
-  // map response → { id, name, role, quote, rating, avatar }
+  // map the response to { id, name, role, quote, avatar }
 }
 ```
 
-- `"use cache"` caches the mapped result, not just the HTTP response, so the data is fetched at build time and the page stays fully static.
-- `cacheLife("hours")` serves the cached value and refreshes it in the background at most once an hour. Visitors never wait on the upstream API.
-- The demo API never changes, so a time-based refresh is enough. With a CMS behind it, the next step would be `cacheTag` plus a webhook route that calls `revalidateTag`, which also allows a much longer `cacheLife`.
-- Failed requests throw inside the cache scope, so an error is never cached. The section catches it and renders nothing, which keeps an upstream outage from breaking the build or the page.
-- Avatars go through `next/image` (`images.remotePatterns` in `next.config.ts`), so they are resized, converted to modern formats and cached by Next.js.
+- `"use cache"` stores the mapped result. The API is called at build time and the data ships inside the static HTML, so a visitor never waits on it.
+- `cacheLife("hours")` refreshes the data in the background about once an hour. `next build` shows `/` as static with `Revalidate 1h`.
+- A failed request throws, so an error is never cached. The section catches it and renders nothing, which keeps an API outage from breaking the page or the build.
+- Photos go through `next/image`, so they are resized and cached too.
+
+If testimonials came from a CMS, I would add `cacheTag` and a webhook that calls `revalidateTag`, then raise the cache lifetime.

@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { VscSend } from "react-icons/vsc";
 import { subscribe, type NewsletterState } from "@/app/actions/newsletter";
 
 const initialState: NewsletterState = { status: "idle", message: "", email: "" };
@@ -10,7 +11,7 @@ export function NewsletterForm() {
   const hasError = state.status === "error";
 
   return (
-    <form action={formAction} className="mt-4 flex max-w-md flex-col gap-2">
+    <form action={formAction} className="relative mt-2.5 flex w-[340px] max-w-full lg:w-[422px]">
       <input
         type="text"
         name="company"
@@ -19,27 +20,30 @@ export function NewsletterForm() {
         aria-hidden="true"
         className="hidden"
       />
-      <div className="flex gap-2">
-        <input
-          type="email"
-          name="email"
-          required
-          defaultValue={state.email}
-          autoComplete="email"
-          placeholder="Enter your email"
-          aria-label="Email address"
-          aria-invalid={hasError}
-          aria-describedby="newsletter-status"
-          className="min-w-0 flex-1 border px-3 py-2"
-        />
-        <button type="submit" disabled={pending} className="border px-4 py-2 disabled:opacity-50">
-          {pending ? "Subscribing…" : "Subscribe"}
-        </button>
-      </div>
+      <input
+        type="email"
+        name="email"
+        required
+        defaultValue={state.email}
+        autoComplete="email"
+        placeholder="Email Address"
+        aria-label="Email address"
+        aria-invalid={hasError}
+        aria-describedby="newsletter-status"
+        className="h-8 min-w-0 flex-1 bg-white px-2.5 text-xs tracking-[0.36px] placeholder:text-body focus-visible:outline-accent lg:h-[46px] lg:text-sm lg:tracking-[0.42px]"
+      />
+      <button
+        type="submit"
+        aria-label="Subscribe"
+        disabled={pending}
+        className="flex size-8 shrink-0 items-center justify-center bg-accent text-white hover:bg-navy disabled:opacity-60 lg:size-[46px]"
+      >
+        <VscSend className="size-3 lg:size-[18px]" />
+      </button>
       <p
         id="newsletter-status"
         role="status"
-        className={hasError ? "text-sm text-red-600" : "text-sm text-green-700"}
+        className={`absolute top-full left-0 mt-1 text-xs leading-4 ${hasError ? "text-red-700" : "text-green-700"}`}
       >
         {state.message}
       </p>

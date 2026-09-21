@@ -22,7 +22,7 @@ export function ExploreMore() {
           education pages:
         </p>
 
-        <ul className="mt-[41px] grid gap-2.5 lg:mt-[31px] lg:w-fit lg:grid-cols-[318px] lg:gap-x-[70px] lg:gap-y-[23px] xl:grid-flow-col xl:grid-cols-[318px_318px] xl:grid-rows-2">
+        <ul className="mt-[41px] grid gap-2.5 sm:grid-cols-2 sm:gap-x-10 lg:mt-[31px] lg:w-fit lg:grid-cols-[318px] lg:gap-x-[70px] lg:gap-y-[23px] xl:grid-flow-col xl:grid-cols-[318px_318px] xl:grid-rows-2">
           {GUIDES.map((title) => (
             <li key={title}>
               <Link
@@ -44,7 +44,7 @@ export function ExploreMore() {
         alt="Model wearing a diamond necklace, ring and earrings"
         sizes="(min-width: 1280px) 590px, 100vw"
         placeholder="blur"
-        className="mt-[30px] h-[210px] w-full object-cover lg:absolute lg:inset-y-0 lg:right-0 lg:mt-0 lg:h-full lg:w-[41%]"
+        className="mt-[30px] h-[210px] w-full object-cover md:h-[340px] lg:absolute lg:inset-y-0 lg:right-0 lg:mt-0 lg:h-full lg:w-[41%]"
       />
     </section>
   );

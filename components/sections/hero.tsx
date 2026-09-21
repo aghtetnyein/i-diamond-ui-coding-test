@@ -9,18 +9,18 @@ const ARTWORK = [
   {
     src: jewelry,
     preload: true,
-    sizes: "(min-width: 1280px) 534px, 143px",
-    className: "bottom-0 left-0 w-[143px] lg:w-[534px]",
+    sizes: "(min-width: 1280px) 534px, (min-width: 768px) 220px, 143px",
+    className: "bottom-0 left-0 w-[143px] md:w-[220px] lg:w-[534px]",
   },
   {
     src: diamonds,
-    sizes: "(min-width: 1280px) 248px, 89px",
-    className: "top-0 right-0 w-[89px] lg:w-[248px]",
+    sizes: "(min-width: 1280px) 248px, (min-width: 768px) 120px, 89px",
+    className: "top-0 right-0 w-[89px] md:w-[120px] lg:w-[248px]",
   },
   {
     src: ring,
-    sizes: "(min-width: 1280px) 541px, 186px",
-    className: "right-0 bottom-0 w-[186px] lg:w-[541px]",
+    sizes: "(min-width: 1280px) 541px, (min-width: 768px) 230px, 186px",
+    className: "right-0 bottom-0 w-[186px] md:w-[230px] lg:w-[541px]",
   },
 ];
 
@@ -28,9 +28,9 @@ export function Hero() {
   return (
     <section className="bg-hero">
       <div className="relative mx-auto flex h-[300px] max-w-[1440px] items-center justify-center overflow-clip lg:h-[420px]">
-        <Image src={patternMobile} alt="" sizes="100vw" className="absolute inset-0 size-full lg:hidden" />
-        <Image src={pattern} alt="" sizes="468px" className="absolute left-0 hidden h-full w-[468px] lg:block" />
-        <Image src={pattern} alt="" sizes="468px" className="absolute right-0 hidden h-full w-[468px] -scale-x-100 lg:block" />
+        <Image src={patternMobile} alt="" sizes="100vw" className="absolute inset-0 size-full md:hidden" />
+        <Image src={pattern} alt="" sizes="468px" className="absolute left-0 hidden h-full w-auto md:block" />
+        <Image src={pattern} alt="" sizes="468px" className="absolute right-0 hidden h-full w-auto -scale-x-100 md:block" />
 
         {/* The exports have a white backdrop; multiply drops it against the grey banner. */}
         {ARTWORK.map(({ src, sizes, className, preload }) => (
@@ -46,7 +46,7 @@ export function Hero() {
           />
         ))}
 
-        <div className="relative w-[286px] text-center text-body lg:w-[639px]">
+        <div className="relative w-[286px] text-center text-body md:w-auto lg:w-[639px]">
           <h1 className="font-serif text-[26px] leading-[35px] tracking-[0.26px] lg:text-5xl lg:leading-[64px] lg:tracking-[0.48px]">
             Custom Jewelry
           </h1>

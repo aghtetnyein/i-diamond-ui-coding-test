@@ -44,7 +44,7 @@ export function Carousel({ label, children }: Props) {
 
   return (
     <div role="region" aria-roledescription="carousel" aria-label={label} className="flex flex-col items-center gap-5 lg:gap-[30px]">
-      <div className="relative w-[300px] md:w-[615px] lg:w-full">
+      <div className="relative w-[300px] md:w-[615px] min-[62.5rem]:w-[930px] lg:w-full">
         <div
           ref={trackRef}
           tabIndex={0}

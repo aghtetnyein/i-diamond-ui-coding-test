@@ -31,9 +31,9 @@ export function WhyChoose() {
 
         <h2 className="heading-section relative text-center leading-[50px]">Why Choose MyJewel?</h2>
 
-        <ul className="relative mt-5 grid gap-5 lg:mt-10 lg:grid-cols-[repeat(3,minmax(0,400px))] lg:gap-[33px]">
+        <ul className="relative mt-5 grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:mt-10 lg:grid-cols-[repeat(3,minmax(0,400px))] lg:gap-[33px]">
           {REASONS.map(({ icon: Icon, title, text }) => (
-            <li key={title} className="flex flex-col items-center gap-[15px] bg-white p-5 text-center shadow-card duration-300 ease-out hover:shadow-[0_6px_24px_0_rgb(122_122_122/0.18)] motion-safe:transition motion-safe:hover:-translate-y-1 lg:gap-5">
+            <li key={title} className="flex flex-col items-center gap-[15px] bg-white p-5 text-center shadow-card duration-300 ease-out hover:shadow-[0_6px_24px_0_rgb(122_122_122/0.18)] motion-safe:transition motion-safe:hover:-translate-y-1 sm:max-md:last:col-span-2 sm:max-md:last:mx-auto sm:max-md:last:w-[calc(50%-10px)] lg:gap-5">
               <Icon aria-hidden className="size-[35px] text-navy lg:size-[45px]" />
               <h3 className="font-serif text-base leading-[21px] font-semibold tracking-[0.48px] text-navy lg:text-xl lg:leading-[27px] lg:tracking-[0.6px]">
                 {title}

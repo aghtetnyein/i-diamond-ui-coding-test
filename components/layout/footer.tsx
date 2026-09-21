@@ -37,9 +37,9 @@ export function Footer() {
   return (
     <footer className="bg-footer">
       <div className="container-page pt-[50px] lg:pt-[86px]">
-        <div className="lg:grid lg:min-h-[210px] lg:grid-cols-[254px_264px_264px_minmax(0,1fr)]">
+        <div className="md:grid md:grid-cols-3 md:gap-x-10 lg:min-h-[210px] lg:grid-cols-[254px_264px_264px_minmax(0,1fr)] lg:gap-x-0">
           {COLUMNS.map(({ title, links }) => (
-            <nav key={title} aria-label={title} className="border-b border-line pt-2.5 pb-[9px] lg:border-0 lg:py-0">
+            <nav key={title} aria-label={title} className="border-b border-line pt-2.5 pb-[9px] md:border-0 lg:py-0">
               <h2 className="text-sm leading-[18px] font-semibold tracking-[0.14px] uppercase lg:text-base lg:leading-[21px] lg:tracking-[0.16px]">
                 {title}
               </h2>
@@ -55,7 +55,7 @@ export function Footer() {
             </nav>
           ))}
 
-          <div className="mt-[30px] lg:mt-0">
+          <div className="mt-[30px] md:col-span-3 lg:col-span-1 lg:mt-0">
             <h2 className="text-base leading-[21px] font-semibold tracking-[0.16px]">Let’s Keep In Touch</h2>
             <NewsletterForm />
 

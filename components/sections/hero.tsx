@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import pattern from "@/public/images/hero-bg.png";
 import patternMobile from "@/public/images/hero-bg-mobile.png";
 import diamonds from "@/public/images/hero-diamonds.jpg";
@@ -24,13 +24,33 @@ const ARTWORK = [
   },
 ];
 
+const TABLET_UP = "(min-width: 768px)";
+const EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=";
+
+// <picture> lets each screen download only its own pattern file, which two hidden-by-CSS images would not.
+function Pattern() {
+  const wide = getImageProps({ src: pattern, alt: "", sizes: "468px" }).props.srcSet;
+  const { props: narrow } = getImageProps({ src: patternMobile, alt: "", sizes: "100vw", loading: "eager" });
+
+  return (
+    <>
+      <picture>
+        <source media={TABLET_UP} srcSet={wide} sizes="468px" />
+        <img {...narrow} alt="" className="absolute top-0 left-0 size-full md:w-auto" />
+      </picture>
+      <picture>
+        <source media={TABLET_UP} srcSet={wide} sizes="468px" />
+        <img src={EMPTY_PIXEL} alt="" className="absolute top-0 right-0 hidden h-full w-auto -scale-x-100 md:block" />
+      </picture>
+    </>
+  );
+}
+
 export function Hero() {
   return (
     <section className="bg-hero">
       <div className="relative mx-auto flex h-[300px] max-w-[1440px] items-center justify-center overflow-clip lg:h-[420px]">
-        <Image src={patternMobile} alt="" sizes="100vw" className="absolute inset-0 size-full md:hidden" />
-        <Image src={pattern} alt="" sizes="468px" className="absolute left-0 hidden h-full w-auto md:block" />
-        <Image src={pattern} alt="" sizes="468px" className="absolute right-0 hidden h-full w-auto -scale-x-100 md:block" />
+        <Pattern />
 
         {/* The exports have a white backdrop; multiply drops it against the grey banner. */}
         {ARTWORK.map(({ src, sizes, className, preload }) => (
